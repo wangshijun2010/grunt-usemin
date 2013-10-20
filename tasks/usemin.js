@@ -117,6 +117,7 @@ module.exports = function (grunt) {
         }
 
         // var locator = options.revmap ? grunt.file.readJSON(options.revmap) : function (p) { return grunt.file.expand({filter: 'isFile'}, p); };
+        var prepareConfig = grunt.config('useminPrepare');
         var locator = getLocator(grunt, options);
         var revvedfinder = new RevvedFinder(locator);
         var handler = new FileProcessor(patterns, revvedfinder, function (msg) { grunt.log.writeln(msg);});
@@ -129,7 +130,7 @@ module.exports = function (grunt) {
                 grunt.log.subhead('Processing as ' + options.type.toUpperCase() + ' - ' + filename);
 
                 // Our revved version locator
-                var content = handler.process(filename, options.assetsDirs);
+                var content = handler.process(filename, options.assetsDirs, prepareConfig);
 
                 // write the new content to disk
                 grunt.file.write(filename, content);
@@ -148,7 +149,8 @@ module.exports = function (grunt) {
             .writeln('Going through ' + grunt.log.wordlist(files) + ' to update the config')
             .writeln('Looking for build script HTML comment blocks');
 
-        var flow = getFlowFromConfig(grunt.config('useminPrepare'), this.target);
+        var prepareConfig = grunt.config('useminPrepare');
+        var flow = getFlowFromConfig(prepareConfig, this.target);
 
         var c = new ConfigWriter( flow, {root: root, dest: dest, staging: '.tmp'} );
 
@@ -163,7 +165,7 @@ module.exports = function (grunt) {
         files.forEach(function (filepath) {
             var config;
             try {
-                config = c.process(filepath, grunt.config());
+                config = c.process(filepath, grunt.config(), prepareConfig);
             }
             catch(e) {
                 grunt.fail.fatal(e);
