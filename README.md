@@ -127,6 +127,13 @@ Default: `nil`
 
 The root directory from which your files will be resolved.
 
+### srcPattern
+
+Type: 'string'
+Default: `/(href|src)=["']([^'"]+)["']/`
+
+The RegExp used to find script or link tag, if you are using some server side frameworks to generate this tags, this option maybe useful for you to customize how to find these tags
+
 ### flow
 
 Type: 'object'
